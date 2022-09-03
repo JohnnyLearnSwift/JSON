@@ -19,25 +19,7 @@ class LoveViewController: UIViewController {
     
     @IBAction func buttonCountLovePercentagePressed() {
         makeUrlWithParams()
-        NetworkManager.shared.fetchRequestWithoutDecoder(string: urlLove) { result in
-            switch result {
-            case .success(let loveCalculation):
-                self.labelPercentage.text = loveCalculation.percentage
-                self.labelDescription.text = loveCalculation.result
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-//        NetworkManager.shared.fetchRequest(string: urlLove, completion: {
-//            results in
-//            switch results {
-//            case .success(let loveCalculation):
-//                self.labelPercentage.text = loveCalculation.percentage
-//                self.labelDescription.text = loveCalculation.result
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//            }
-//        })
+        fetchRequest(with: false)
     }
 }
 
@@ -59,6 +41,31 @@ extension LoveViewController {
             emptyTextFieldsAlert()
         } else {
             urlLove = "\(apiUrl)sname=\(snameTF.text ?? "Yana")&fname=\(fnameTF.text ?? "Eugene")"
+        }
+    }
+    
+    private func fetchRequest(with decoder: Bool = true) {
+        if decoder {
+            NetworkManager.shared.fetchRequest(string: urlLove, completion: {
+                results in
+                switch results {
+                case .success(let loveCalculation):
+                    self.labelPercentage.text = loveCalculation.percentage
+                    self.labelDescription.text = loveCalculation.result
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            })
+        } else {
+            NetworkManager.shared.fetchRequestWithoutDecoder(string: urlLove) { result in
+                switch result {
+                case .success(let loveCalculation):
+                    self.labelPercentage.text = loveCalculation.percentage
+                    self.labelDescription.text = loveCalculation.result
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
 }
