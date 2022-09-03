@@ -19,19 +19,25 @@ class LoveViewController: UIViewController {
     
     @IBAction func buttonCountLovePercentagePressed() {
         makeUrlWithParams()
-        print(urlLove)
-        print(fnameTF.text ?? "")
-        NetworkManager.shared.fetchRequest(string: urlLove, completion: {
-            results in
-            switch results {
+        NetworkManager.shared.fetchRequestWithoutDecoder(string: urlLove) { result in
+            switch result {
             case .success(let loveCalculation):
                 self.labelPercentage.text = loveCalculation.percentage
                 self.labelDescription.text = loveCalculation.result
-                print(loveCalculation)
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        })
+        }
+//        NetworkManager.shared.fetchRequest(string: urlLove, completion: {
+//            results in
+//            switch results {
+//            case .success(let loveCalculation):
+//                self.labelPercentage.text = loveCalculation.percentage
+//                self.labelDescription.text = loveCalculation.result
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        })
     }
 }
 
